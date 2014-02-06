@@ -47,7 +47,7 @@ module Rapns
       index({delivered: -1, failed: -1, deliver_after: -1})
 
       scope :ready_for_delivery, lambda {
-        where({"$and" => [delivered: false, failed: false, "$or" => [{"$deliver_after.ne" => nil}, deliver_after: {"$lt" => Time.now}]]})
+        where({"$and" => [{delivered  => false}, {failed  => false}, {"$or" => [{"$deliver_after.ne" => nil}, {deliver_after => {"$lt" => Time.now}}]}]})
       }
 
       scope :for_apps, lambda { |apps|
