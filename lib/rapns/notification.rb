@@ -14,6 +14,8 @@ module Rapns
         where('app_id IN (?)', apps.map(&:id))
       }
 
+      scope :completed, lambda { where("delivered = ? OR failed = ?", true, true) }
+
       # TODO: Dump using multi json.
       serialize :registration_ids
 
@@ -54,6 +56,8 @@ module Rapns
         where(app_id: {"$in" => apps.map(&:id)})
       }
 
+      scope :completed, lambda { where({"$or" => [{delivered  => true}, {failed  => true}]}) }
+
     end
 
     belongs_to :app, :class_name => 'Rapns::App'
@@ -66,17 +70,6 @@ module Rapns
 
     validates :expiry, :numericality => true, :allow_nil => true
     validates :app, :presence => true
-
-    scope :ready_for_delivery, lambda {
-      where('delivered = ? AND failed = ? AND (deliver_after IS NULL OR deliver_after < ?)',
-            false, false, Time.now)
-    }
-
-    scope :for_apps, lambda { |apps|
-      where('app_id IN (?)', apps.map(&:id))
-    }
-
-    scope :completed, lambda { where("delivered = ? OR failed = ?", true, true) }
 
     def initialize(*args)
       attributes = args.first
