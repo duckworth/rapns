@@ -76,9 +76,20 @@ module Rapns
       end
 
       def to_binary(options = {})
-        id_for_pack = options[:for_validation] ? 0 : id
+        if Rapns.config.store == :active_record
+          id_for_pack = options[:for_validation] ? 0 : id
+        else
+          id_for_pack = options[:for_validation] ? 0 : validation_id
+        end
         [1, id_for_pack, expiry, 0, 32, device_token, payload_size, payload].pack("cNNccH*na*")
       end
+
+      def data=(attrs)
+        return unless attrs
+        raise ArgumentError, "must be a Hash" if !attrs.is_a?(Hash)
+        super attrs.merge(data || {})
+      end
+
     end
   end
 end

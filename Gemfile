@@ -17,6 +17,8 @@ platform :ruby do
   gem 'mysql2'
   gem 'yajl-ruby'
   gem 'sqlite3'
+  gem 'mongoid'
+  gem 'mongoid-autoinc'
 end
 
 platform :jruby do

@@ -1,7 +1,7 @@
 require 'unit_spec_helper'
 
 describe Rapns do
-  let(:config) { double }
+  let(:config) { double(:store => :active_record ) }
 
   before { Rapns.stub(:config => config) }
 
