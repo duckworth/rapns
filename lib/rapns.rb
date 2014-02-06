@@ -6,7 +6,6 @@ require 'rapns/deprecatable'
 require 'rapns/logger'
 require 'rapns/multi_json_helper'
 require 'rapns/configuration'
-
 module Rapns
 
   def self.init_orm
@@ -20,18 +19,23 @@ module Rapns
 
     require 'rapns/notification'
     require 'rapns/app'
+
     require 'rapns/apns/binary_notification_validator'
     require 'rapns/apns/device_token_format_validator'
     require 'rapns/apns/notification'
     require 'rapns/apns/feedback'
     require 'rapns/apns/app'
-
+    
     require 'rapns/gcm/expiry_collapse_key_mutual_inclusion_validator'
-    require 'rapns/gcm/payload_data_size_validator'
-    require 'rapns/gcm/registration_ids_count_validator'
     require 'rapns/gcm/notification'
     require 'rapns/gcm/app'
-
+    
+    require 'rapns/wpns/notification'
+    require 'rapns/wpns/app'
+    
+    require 'rapns/adm/data_validator'
+    require 'rapns/adm/notification'
+    require 'rapns/adm/app'
   end
 
   def self.attr_accessible_available?
@@ -40,10 +44,6 @@ module Rapns
   end
 
   require 'rapns/railtie' if defined?(Rails)
-
-  def self.jruby?
-    defined? JRUBY_VERSION
-  end
 end
 
 require 'rapns/reflection'
@@ -55,24 +55,10 @@ require 'rapns/notifier'
 require 'rapns/payload_data_size_validator'
 require 'rapns/registration_ids_count_validator'
 
-require 'rapns/apns/binary_notification_validator'
-require 'rapns/apns/device_token_format_validator'
-require 'rapns/apns/notification'
-require 'rapns/apns/feedback'
-require 'rapns/apns/app'
-
-require 'rapns/gcm/expiry_collapse_key_mutual_inclusion_validator'
-require 'rapns/gcm/notification'
-require 'rapns/gcm/app'
-
-require 'rapns/wpns/notification'
-require 'rapns/wpns/app'
-
-require 'rapns/adm/data_validator'
-require 'rapns/adm/notification'
-require 'rapns/adm/app'
-
 module Rapns
+  def self.jruby?
+    defined? JRUBY_VERSION
+  end
 
   def self.require_for_daemon
     require 'rapns/daemon'
