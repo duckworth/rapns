@@ -21,7 +21,7 @@ module Rapns
 
     else
       include Mongoid::Autoinc
-
+      store_in collection: 'rapns_notifications
       field :badge, type: Integer
       field :device_token, type: String
       field :sound, type: String, default: "default"
@@ -53,10 +53,10 @@ module Rapns
       }
 
       scope :for_apps, lambda { |apps|
-      where({app_id: {"$in" => apps.map(&:id)}})
+        where({app_id: {"$in" => apps.map(&:id)}})
       }
 
-      scope :completed, lambda { where({"$or" => [{:delivered  => true}, {:failed  => true}]}) }
+      scope :completed, lambda { where({"$or" => [{delivered: true}, {failed: true}]}) }
 
     end
 
