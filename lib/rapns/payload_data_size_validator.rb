@@ -1,3 +1,5 @@
+require 'active_model'
+
 module Rapns
   class PayloadDataSizeValidator < ActiveModel::Validator
     def validate(record)
