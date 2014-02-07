@@ -21,7 +21,8 @@ module Rapns
 
     else
       include Mongoid::Autoinc
-      store_in collection: 'rapns_notifications
+      store_in collection: 'rapns_notifications'
+
       field :badge, type: Integer
       field :device_token, type: String
       field :sound, type: String, default: "default"
