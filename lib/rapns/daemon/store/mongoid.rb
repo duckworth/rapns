@@ -5,6 +5,8 @@ module Rapns
     module Store
       class Mongoid
 
+        DEFAULT_MARK_OPTIONS = {:persist => true}
+
         def deliverable_notifications(apps)
           batch_size = Rapns.config.batch_size
           relation = Rapns::Notification.ready_for_delivery.for_apps(apps)
@@ -36,10 +38,13 @@ module Rapns
           notification.save!(:validate => false)
         end
 
-        def mark_delivered(notification)
+        def mark_delivered(notification, time, opts = {})
+          opts = DEFAULT_MARK_OPTIONS.dup.merge(opts)
           notification.delivered = true
-          notification.delivered_at = Time.now
-          notification.save!(:validate => false)
+          notification.delivered_at = time
+          if opts[:persist]
+            notification.save!(:validate => false)
+          end
         end
 
         def mark_batch_delivered(notifications)
@@ -50,14 +55,17 @@ module Rapns
           end
         end
 
-        def mark_failed(notification, code, description)
+        def mark_failed(notification, code, description, time, opts = {})
+          opts = DEFAULT_MARK_OPTIONS.dup.merge(opts)
           notification.delivered = false
           notification.delivered_at = nil
           notification.failed = true
-          notification.failed_at = Time.now
+          notification.failed_at = time
           notification.error_code = code
           notification.error_description = description
-          notification.save!(:validate => false)
+          if opts[:persist]
+            notification.save!(:validate => false)
+          end
         end
 
         def mark_batch_failed(notifications, code, description)
