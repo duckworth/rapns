@@ -1,5 +1,6 @@
 require 'mongoid'
 require 'autoinc'
+require 'active_model'
 
 module Rapns
   class RecordBase
